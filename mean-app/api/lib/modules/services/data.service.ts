@@ -3,7 +3,16 @@ import PostModel from '../schemas/data.schema';
 
 class DataService {
 
-   public async addData(postParams: IData) {
+    public async query(query: Query<number | string | boolean>) {
+        try {
+            const result = await PostModel.find(query, { __v: 0, _id: 0 });
+            return result;
+        } catch (error) {
+            throw new Error(`Query failed: ${error}`);
+        }
+    }
+
+   public async addNew(postParams: IData) {
     try {
         const dataModel = new PostModel(postParams);
         await dataModel.save();
@@ -43,7 +52,7 @@ public async getAll() {
     }
 }
 
-public async deleteData(query: Query<number | string | boolean>) {
+public async deleteThis(query: Query<number | string | boolean>) {
     try {
         await PostModel.deleteMany(query);
     } catch (error) {

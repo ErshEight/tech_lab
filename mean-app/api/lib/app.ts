@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import express from 'express';
 import { config } from './config';
 import Controller from "./interfaces/controller.interface";
-import { loginToServer } from 'middlewares/loginToServer.middleware';
+import { loginToServer } from './middlewares/loginToServer.middleware';
 
 class App {
     public app: express.Application;
