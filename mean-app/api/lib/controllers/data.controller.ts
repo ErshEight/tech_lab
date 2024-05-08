@@ -15,9 +15,9 @@ class DataController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.post(`${this.path}`, loginToServer ,this.addData);
-        this.router.post(`${this.path}/:num`, loginToServer, this.getPostByNum);
-        this.router.delete(`${this.path}/:id`, loginToServer ,this.deleteData);
+        this.router.post(`${this.path}`, loginToServer, this.addData); 
+        this.router.post(`${this.path}/:num`, loginToServer, this.getManyData);
+        this.router.delete(`${this.path}/:id`, loginToServer, this.deleteData);
         this.router.delete(`${this.path}`, loginToServer ,this.deleteAll);
         this.router.get(`${this.path}/:id`, loginToServer ,this.getData);
         this.router.get(`${this.path}`, loginToServer ,this.getAll);
@@ -48,11 +48,16 @@ class DataController implements Controller {
         response.status(200).json(testArr);
     };
 
-    private getPostByNum = async (request: Request, response: Response, next: NextFunction) => {
+    private getManyData = async (request: Request, response: Response, next: NextFunction) => {
         const { num } = request.params;
-        const numData = await this.dataService.getPostByNum(num);
-        response.status(200).json(numData);
-    }; 
+
+        if (!Number.isInteger(Number(num)) || Number(num) >= testArr.length || Number(num) < 0) {
+            return response.status(404).json({ error: "Not found." });
+        }
+
+        const slicedArray = testArr.slice(0, Number(num));
+        response.status(200).json(slicedArray);
+    }
 
     private getData = async (request: Request, response: Response, next: NextFunction) => {
         const { id } = request.params;
